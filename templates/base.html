@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rest In Bengal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f7f7f7;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        header a {
+            color: #fff;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+        .messages p {
+            background-color: #e0ffe0;
+            border: 1px solid #b2ffb2;
+            padding: 10px;
+            border-radius: 4px;
+            color: #2d662d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated %}
+            <span>Welcome, {{ user.username }}!</span> |
+            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'view_points' %}">My Points</a>
+            <a href="{% url 'book_room' %}">Book Room</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </header>
+
+    <div class="messages">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
+

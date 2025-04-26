@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rest In Bengal - Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .auth-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-section p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .auth-section a,
+        .auth-section button {
+            color: white;
+            background-color: #4CAF50;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 0 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .auth-section button:hover,
+        .auth-section a:hover {
+            background-color: #45a049;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .action-buttons button {
+            background-color: #19d238;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            margin: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-buttons button:hover {
+            background-color: #19d238;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 22px;
+            color: #333;
+            margin: 40px 0 20px;
+        }
+
+        .card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card li {
+            margin: 10px 0;
+            list-style: none;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Rest In Bengal
+</header>
+
+<div class="container">
+    <h1>Welcome to Rest In Bengal</h1>
+
+    <div class="auth-section">
+        {% if user.is_authenticated %}
+            <p>Hello, {{ user.username }}!</p>
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
+        {% endif %}
+    </div>
+
+    <div class="action-buttons">
+        {% if not user.is_authenticated %}
+            <button onclick="location.href='{% url 'register' %}'">Register</button>
+            <button onclick="location.href='{% url 'login' %}'">Login</button>
+        {% else %}
+            <button onclick="location.href='{% url 'book_room' %}'">Book Room</button>
+            <button onclick="location.href='{% url 'view_rooms' %}'">View Rooms</button>
+            <button onclick="location.href='{% url 'leave_review' %}'">Leave Review</button>
+            <button onclick="location.href='{% url 'view_points' %}'">View Points</button>
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div>
+        <h2 class="section-title">🏨 All Bookings</h2>
+        <div class="card">
+            <ul>
+                {% for booking in bookings %}
+                    <li>{{ booking.user.username }} booked {{ booking.room }} from {{ booking.check_in_date }} to {{ booking.check_out_date }}</li>
+                {% empty %}
+                    <li>No bookings available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2 class="section-title">💳 Payments</h2>
+        <div class="card">
+            <ul>
+                {% for payment in payments %}
+                    <li>{{ payment.booking.user.username }} paid ${{ payment.amount }} on {{ payment.paid_on }}</li>
+                {% empty %}
+                    <li>No payments available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2 class="section-title">🎁 User Points</h2>
+        <div class="card">
+            <ul>
+                {% for point in points %}
+                    <li>{{ point.user.username }} has {{ point.points_earned }} points</li>
+                {% empty %}
+                    <li>No points data available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2 class="section-title">🏨 Rooms</h2>
+        <div class="card">
+            <ul>
+                {% for room in rooms %}
+                    <li>{{ room.type }} - ${{ room.price }} (Status: {{ room.status }})</li>
+                {% empty %}
+                    <li>No rooms available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2 class="section-title">💬 Reviews</h2>
+        <div class="card">
+            <ul>
+                {% for review in reviews %}
+                    <li>
+                        Room: {{ review.room.type }} |
+                        Reviewer: {{ review.reviewer_name }} |
+                        Rating: {{ review.rating }} |
+                        Comment: {{ review.comment }}
+                    </li>
+                {% empty %}
+                    <li>No reviews available.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

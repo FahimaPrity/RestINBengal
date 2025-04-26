@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms - Rest In Bengal</title>
+    <style>
+        /* Styles for making the images attractive */
+        .room-image {
+            width: 100%; /* Makes the image responsive */
+            max-width: 600px; /* Maximum width for larger screens */
+            height: auto; /* Maintains the aspect ratio */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Adds a shadow for better effect */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effect */
+        }
+
+        .room-image:hover {
+            transform: scale(1.05); /* Slight zoom effect when hovered */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+        }
+
+        .room-item {
+            margin-bottom: 30px; /* Space between each room */
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .room-item h2 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .room-item p {
+            font-size: 18px;
+            color: #777;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Rooms</h1>
+
+    <ul>
+        {% for room in rooms %}
+            <li class="room-item">
+                <h2>{{ room.type }} - ${{ room.price }}</h2>
+                <p>Status: {{ room.status }}</p>
+
+                {% if room.status == 'available' %}
+                    <!-- Book Now button -->
+                    <form action="{% url 'book_room' %}" method="get">
+                        <input type="hidden" name="room_id" value="{{ room.id }}">
+                        <button type="submit">Book Now</button>
+                    </form>
+                {% else %}
+                    <p>This room is not available.</p>
+                {% endif %}
+
+                {% if room.image %}
+                    <img class="room-image" src="{{ room.image.url }}" alt="{{ room.type }}">
+                {% else %}
+                    <p>No image available for this room.</p>
+                {% endif %}
+
+                <br><br>
+            </li>
+        {% empty %}
+            <li>No rooms available.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
