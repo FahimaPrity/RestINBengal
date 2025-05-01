@@ -7,55 +7,86 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
+            margin: 0;
             background-color: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         header {
             background-color: #333;
             color: white;
-            padding: 15px;
-            margin-bottom: 20px;
+            width: 100%;
+            padding: 20px 0;
             text-align: center;
-            border-radius: 5px;
+            border-bottom: 3px solid #bfa145;
         }
+
         header h1 {
             margin: 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
         }
-        header a {
-            color: #fff;
-            margin-right: 15px;
-            text-decoration: none;
-        }
+
         .login-form {
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 320px;
+            margin-top: 50px;
+            padding: 30px;
             background-color: white;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-family: 'Playfair Display', serif;
+        }
+
         .login-form input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
+            font-size: 14px;
         }
+
         .login-form button {
             width: 100%;
-            padding: 10px;
-            background-color: #333;
+            padding: 12px;
+            background-color: #bfa145;
             color: white;
             border: none;
             border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
+        .login-form button:hover {
+            background-color: #a68c3a;
+        }
+
         .signup-link {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
+
         .signup-link a {
-            color: #333;
-            text-decoration: none;
+            color: #bfa145;
+            text-decoration: underline;
+            font-weight: bold;
+            text-underline-offset: 4px;
+            text-decoration-thickness: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #a68c3a;
         }
     </style>
 </head>
