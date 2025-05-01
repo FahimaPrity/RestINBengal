@@ -150,6 +150,21 @@
             color: white;
             margin-top: 60px;
         }
+        header form button {
+            background-color: red; /* Red color background */
+            color: white; /* White text */
+            padding: 8px 16px; /* Padding inside button */
+            border-radius: 5px; /* Rounded corners */
+            border: none; /* No border */
+            font-size: 16px; /* Same font size as other links */
+            cursor: pointer; /* Pointer cursor on hover */
+            font-weight: 500; /* Same font weight */
+            transition: background-color 0.3s ease; /* Smooth transition for background */
+        }
+
+        header form button:hover {
+            background-color: darkred; /* Darker red on hover */
+        }
     </style>
 </head>
 <body>
@@ -165,7 +180,7 @@
             <a href="{% url 'view_points' %}">Points</a>
             <form action="{% url 'logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">Logout</button>
+                <button type="submit">Logout</button> <!-- এখানে logout button-এর স্টাইলিং চেঞ্জ হবে -->
             </form>
         {% else %}
             <a href="{% url 'login' %}">Login</a>
