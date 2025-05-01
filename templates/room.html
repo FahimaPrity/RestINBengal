@@ -102,7 +102,7 @@
     <ul>
         {% for room in rooms %}
             <li>
-                <h2>{{ room.type }} - ${{ room.price }}</h2>
+                <h2>{{ room.type }} - {{ room.price }}</h2>
                 <p>Status: {{ room.status }}</p>
 
                 {% if room.status == 'available' %}
