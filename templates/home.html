@@ -4,33 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rest In Bengal - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
     <style>
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #fdf6e3;
             margin: 0;
             padding: 0;
+            color: #333;
         }
-
         header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 0;
+            background-color: #2f2f2f;
+            color: #fff;
+            padding: 20px;
             text-align: center;
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 26px;
+            font-family: 'Playfair Display', serif;
+            border-bottom: 6px solid #bfa145;
+            letter-spacing: 1px;
         }
 
         .container {
             max-width: 1100px;
-            margin: 30px auto;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 40px;
+            color: #2f2f2f;
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            margin-bottom: 30px;
         }
 
         .auth-section {
@@ -46,19 +52,20 @@
         .auth-section a,
         .auth-section button {
             color: white;
-            background-color: #4CAF50;
+            background-color: #bfa145;
             padding: 8px 14px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
             margin: 0 5px;
             font-size: 15px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .auth-section button:hover,
-        .auth-section a:hover {
-            background-color: #45a049;
+        .auth-section a:hover,
+        .auth-section button:hover {
+            background-color: #a48f3e;
         }
 
         .action-buttons {
@@ -67,51 +74,69 @@
         }
 
         .action-buttons button {
-            background-color: #19d238;
+            background-color: #2F2F2F;
             color: white;
-            padding: 10px 18px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             margin: 8px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             transition: background-color 0.3s ease;
         }
 
         .action-buttons button:hover {
-            background-color: #19d238;
+            background-color: #BFA145;
         }
 
         .section-title {
             text-align: center;
-            font-size: 22px;
-            color: #333;
-            margin: 40px 0 20px;
+            font-size: 24px;
+            font-family: 'Playfair Display', serif;
+            color: #2f2f2f;
+            margin: 50px 0 20px;
         }
 
-        .card-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
+
 
         .card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s;
+            background-color: #fff;
+            padding: 20px 24px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card ul {
+            padding-left: 20px;
+            margin: 0;
         }
 
         .card li {
             margin: 10px 0;
-            list-style: none;
             color: #444;
+            line-height: 1.6;
         }
+
+        .card li::marker {
+            color: #bfa145;
+        }
+
+        form[method="post"] button[type="submit"] {
+            background-color: #d9534f;
+        }
+
+        form[method="post"] button[type="submit"]:hover {
+            background-color: #c9302c;
+        }
+
+
     </style>
 </head>
 <body>
