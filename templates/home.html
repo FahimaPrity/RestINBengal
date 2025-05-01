@@ -6,28 +6,29 @@
     <title>Rest In Bengal - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
     <style>
-
         body {
             font-family: 'Open Sans', sans-serif;
-            background-color: #fdf6e3;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
             color: #333;
         }
+
         header {
             background-color: #2f2f2f;
             color: #fff;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
-            font-size: 26px;
+            font-size: 30px;
             font-family: 'Playfair Display', serif;
-            border-bottom: 6px solid #bfa145;
+            border-bottom: 4px solid #bfa145;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             letter-spacing: 1px;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 40px auto;
+            max-width: 1200px;
+            margin: 50px auto;
             padding: 0 20px;
         }
 
@@ -35,8 +36,8 @@
             text-align: center;
             color: #2f2f2f;
             font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            margin-bottom: 30px;
+            font-size: 36px;
+            margin-bottom: 40px;
         }
 
         .auth-section {
@@ -53,19 +54,20 @@
         .auth-section button {
             color: white;
             background-color: #bfa145;
-            padding: 8px 14px;
+            padding: 10px 18px;
             border: none;
-            border-radius: 6px;
+            border-radius: 30px;
             text-decoration: none;
             margin: 0 5px;
-            font-size: 15px;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .auth-section a:hover,
         .auth-section button:hover {
             background-color: #a48f3e;
+            transform: translateY(-2px);
         }
 
         .action-buttons {
@@ -74,69 +76,75 @@
         }
 
         .action-buttons button {
-            background-color: #2F2F2F;
+            background-color: #2f2f2f;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 6px;
+            border-radius: 30px;
             margin: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .action-buttons button:hover {
-            background-color: #BFA145;
+            background-color: #bfa145;
+            transform: scale(1.05);
         }
 
         .section-title {
             text-align: center;
-            font-size: 24px;
+            font-size: 26px;
             font-family: 'Playfair Display', serif;
             color: #2f2f2f;
             margin: 50px 0 20px;
         }
 
-
-
         .card {
             background-color: #fff;
-            padding: 20px 24px;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 24px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
 
         .card ul {
-            padding-left: 20px;
+            list-style: none;
+            padding-left: 0;
             margin: 0;
         }
 
         .card li {
-            margin: 10px 0;
-            color: #444;
+            margin: 12px 0;
+            color: #555;
             line-height: 1.6;
+            padding-left: 25px;
+            position: relative;
         }
 
-        .card li::marker {
+        .card li::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
             color: #bfa145;
         }
 
         form[method="post"] button[type="submit"] {
             background-color: #d9534f;
+            border-radius: 30px;
         }
 
         form[method="post"] button[type="submit"]:hover {
             background-color: #c9302c;
+            transform: scale(1.05);
         }
-
-
     </style>
 </head>
 <body>
@@ -151,10 +159,6 @@
     <div class="auth-section">
         {% if user.is_authenticated %}
             <p>Hello, {{ user.username }}!</p>
-            <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                {% csrf_token %}
-
-            </form>
         {% else %}
             <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
         {% endif %}
@@ -165,7 +169,6 @@
             <button onclick="location.href='{% url 'register' %}'">Register</button>
             <button onclick="location.href='{% url 'login' %}'">Login</button>
         {% else %}
-            <button onclick="location.href='{% url 'book_room' %}'">Book Room</button>
             <button onclick="location.href='{% url 'view_rooms' %}'">View Rooms</button>
             <button onclick="location.href='{% url 'leave_review' %}'">Leave Review</button>
             <button onclick="location.href='{% url 'view_points' %}'">View Points</button>
