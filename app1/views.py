@@ -135,6 +135,10 @@ def view_points(request):
     # Display the total points on the points page
     return render(request, 'points.html', {'total_points': total_points})
 
+def about_view(request):
+    return render(request, 'about.html')
+
+
 
 # Create points form for manual creation of points (optional)
 def create_point(request):
