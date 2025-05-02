@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.db.models import F
 from django.contrib.auth.models import User
 from .models import Booking, Payment, Point
@@ -54,6 +54,53 @@ def home(request):
         'reviews': reviews,
         'total_points': total_points,  # Show total points on home page
     })
+@login_required(login_url='login')
+def admin_dashboard(request):
+    if not request.user.is_superuser:
+        raise Http404("You are not authorized to access this page.")
+
+    all_users = User.objects.all()
+    all_bookings = Booking.objects.all()
+    all_payments = Payment.objects.all()
+    all_reviews = Review.objects.all()
+
+    return render(request, 'admin_dashboard.html', {
+        'users': all_users,
+        'bookings': all_bookings,
+        'payments': all_payments,
+        'reviews': all_reviews,
+    })
+
+@login_required(login_url='login')
+def book_room(request):
+    if request.user.is_superuser:
+        return HttpResponseForbidden("Admins cannot book rooms.")
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            room = form.cleaned_data['room']
+            if room.status == 'available':
+                room.status = 'not available'
+                room.save()
+
+                booking = form.save(commit=False)
+                booking.user = request.user
+                booking.save()
+
+                point_obj, created = Point.objects.get_or_create(user=request.user)
+                point_obj.points_earned = F('points_earned') + 10
+                point_obj.save()
+                point_obj.refresh_from_db()
+
+                return redirect('make_payment', booking_id=booking.id)
+            else:
+                form.add_error('room', 'This room is already booked or unavailable.')
+    else:
+        form = BookingForm()
+
+    rooms = Room.objects.filter(status='available')
+    return render(request, 'book_room.html', {'form': form, 'rooms': rooms})
 
 
 # Booking view for booking a room
