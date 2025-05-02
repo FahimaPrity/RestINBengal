@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
 
     <style>
+
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: #2F2F2F;
@@ -108,32 +109,7 @@
             text-decoration: underline;
         }
 
-        .reviews-section {
-            margin-top: 40px;
-        }
 
-        .review-item {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .review-item h4 {
-            font-size: 18px;
-            color: #333;
-        }
-
-        .review-item p {
-            font-size: 15px;
-            color: #666;
-        }
-
-        .review-item .rating {
-            font-weight: bold;
-            color: #bfa145;
-        }
     </style>
 </head>
 <body>
@@ -148,21 +124,6 @@
         </form>
         <div class="form-footer">
             <a href="{% url 'home' %}">Back to Home</a>
-        </div>
-
-        <!-- Section for displaying reviews -->
-        <div class="reviews-section">
-            <h2>Customer Reviews</h2>
-            {% for review in reviews %}
-                <div class="review-item">
-                    <h4>{{ review.reviewer_name }}</h4>
-                    <p class="rating">Rating: {{ review.rating }}</p>
-                    <p>{{ review.comment }}</p>
-                    <p><em>Posted on: {{ review.created_at }}</em></p>
-                </div>
-            {% empty %}
-                <p>No reviews yet. Be the first to leave a review!</p>
-            {% endfor %}
         </div>
     </div>
 </body>
