@@ -11,6 +11,16 @@
             background-color: #2F2F2F;
             margin: 0;
             padding: 0;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 10px 20px;
+            background-color: #fff;
+            z-index: 1000;
+        }
+        .main-content {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -81,17 +91,19 @@
 </head>
 <body>
     {% include 'navbar.html' %}
-    <div class="booking-container">
-        <h1>Book a Room</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form.as_p }}
+    <div class="main-content">
+        <div class="booking-container">
+            <h1>Book a Room</h1>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit">Book Now</button>
+            </form>
+            <div class="back-link">
+                <a href="{% url 'home' %}">Back to Home</a>
             </div>
-            <button type="submit">Book Now</button>
-        </form>
-        <div class="back-link">
-            <a href="{% url 'home' %}">Back to Home</a>
         </div>
     </div>
 </body>
