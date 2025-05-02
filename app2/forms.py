@@ -15,4 +15,4 @@ class ReviewForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
-        self.fields['room'].label_from_instance = lambda obj: f"{obj.type} - ${obj.price}"  # Displaying room details
+        self.fields['room'].label_from_instance = lambda obj: f"{obj.type} - {obj.price}"  # Displaying room details
