@@ -2,217 +2,211 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rest In Bengal - Home</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Open+Sans&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
     <style>
-        /* Existing CSS styles */
         body {
+            margin: 0;
             font-family: 'Open Sans', sans-serif;
             background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
             color: #333;
         }
 
         header {
-            background-color: #2f2f2f;
-            color: #fff;
-            padding: 25px;
-            text-align: center;
-            font-size: 30px;
+            background-color: #1e1e1e;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
             font-family: 'Playfair Display', serif;
-            border-bottom: 4px solid #bfa145;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            letter-spacing: 1px;
+            font-size: 32px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #bfa145;
+        }
+
+        .hero {
+            background: url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h2 {
+            position: relative;
+            font-size: 48px;
+            font-family: 'Playfair Display', serif;
+            margin: 0;
         }
 
         .container {
             max-width: 1200px;
-            margin: 50px auto;
+            margin: 60px auto;
             padding: 0 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #2f2f2f;
-            font-family: 'Playfair Display', serif;
-            font-size: 36px;
-            margin-bottom: 40px;
-        }
-
-        .auth-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .auth-section p {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .auth-section a,
-        .auth-section button {
-            color: white;
-            background-color: #bfa145;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 30px;
-            text-decoration: none;
-            margin: 0 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .auth-section a:hover,
-        .auth-section button:hover {
-            background-color: #a48f3e;
-            transform: translateY(-2px);
-        }
-
-        .action-buttons {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .action-buttons button {
-            background-color: #2f2f2f;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 30px;
-            margin: 8px;
-            cursor: pointer;
-            font-size: 17px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .action-buttons button:hover {
-            background-color: #bfa145;
-            transform: scale(1.05);
         }
 
         .section-title {
             text-align: center;
-            font-size: 26px;
+            font-size: 32px;
             font-family: 'Playfair Display', serif;
+            margin-bottom: 40px;
             color: #2f2f2f;
-            margin: 50px 0 20px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
         }
 
         .card {
             background-color: #fff;
-            padding: 24px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px);
         }
 
-        .card ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-
-        .card li {
-            margin: 12px 0;
-            color: #555;
-            line-height: 1.6;
-            padding-left: 25px;
-            position: relative;
-        }
-
-        .card li::before {
-            content: "✔";
-            position: absolute;
-            left: 0;
+        .card i {
+            font-size: 40px;
             color: #bfa145;
+            margin-bottom: 15px;
         }
 
-        form[method="post"] button[type="submit"] {
-            background-color: #d9534f;
-            border-radius: 30px;
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #2f2f2f;
         }
 
-        form[method="post"] button[type="submit"]:hover {
-            background-color: #c9302c;
-            transform: scale(1.05);
+        .card p {
+            font-size: 15px;
+            color: #555;
         }
 
-        .logout-button {
-            color: white;
+        .cta-buttons {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .cta-buttons a {
+            display: inline-block;
             background-color: #bfa145;
-            padding: 10px 18px;
-            border: none;
-            border-radius: 30px;
-            margin-right: 15px;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
             font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            margin: 10px;
+            transition: background-color 0.3s ease;
         }
 
-        .logout-button:hover {
-            background-color: #a48f3e;
-            transform: translateY(-2px);
+        .cta-buttons a:hover {
+            background-color: #a68c3a;
         }
 
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #1e1e1e;
+            color: white;
+            margin-top: 60px;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="font-size: 30px; font-family: 'Playfair Display', serif;">
-            Rest In Bengal
-        </div>
-        <nav>
-            <a href="{% url 'home' %}" style="color: white; margin-right: 15px; text-decoration: none;">Home</a>
-            <a href="{% url 'about' %}" style="color: white; margin-right: 15px; text-decoration: none;">About Us</a>
-            {% if user.is_authenticated %}
-                <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-button">Logout</button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}" style="color: white; margin-right: 15px; text-decoration: none;">Login</a>
-                <a href="{% url 'register' %}" style="color: white; text-decoration: none;">Register</a>
-            {% endif %}
-        </nav>
-    </div>
+    <h1>Rest In Bengal</h1>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'view_rooms' %}">Rooms</a>
+            <a href="{% url 'leave_review' %}">Review</a>
+            <a href="{% url 'view_points' %}">Points</a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="background:none;border:none;color:white;cursor:pointer;">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </nav>
 </header>
 
-<div class="container">
-    <h1>Welcome to Rest In Bengal</h1>
-
-    <div class="auth-section">
-        {% if user.is_authenticated %}
-            <p>Hello, {{ user.username }}!</p>
-        {% else %}
-            <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
-        {% endif %}
-    </div>
-
-    <div class="action-buttons">
-        {% if not user.is_authenticated %}
-            <button onclick="location.href='{% url 'register' %}'">Register</button>
-            <button onclick="location.href='{% url 'login' %}'">Login</button>
-        {% else %}
-            <button onclick="location.href='{% url 'view_rooms' %}'">View Rooms</button>
-            <button onclick="location.href='{% url 'leave_review' %}'">Leave Review</button>
-            <button onclick="location.href='{% url 'view_points' %}'">View Points</button>
-        {% endif %}
-    </div>
-
-    <!-- Booking, Payment, Rooms, and Reviews Sections -->
+<div class="hero">
+    <h2>Your Comfort, Our Tradition</h2>
 </div>
+
+<div class="container">
+    <h2 class="section-title">Enjoy Premium Hospitality</h2>
+    <div class="features">
+        <div class="card">
+            <i class="fas fa-bed"></i>
+            <h3>Book a Room</h3>
+            <p>Reserve from our suite, standard, or deluxe rooms. Comfort and style, always.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-comment-dots"></i>
+            <h3>Give a Review</h3>
+            <p>Your feedback matters! Share your experience and help us serve better.</p>
+        </div>
+    </div>
+
+    <div class="cta-buttons">
+        {% if user.is_authenticated %}
+            <a href="{% url 'view_rooms' %}">Book Now</a>
+            <a href="{% url 'leave_review' %}">Leave Review</a>
+        {% else %}
+            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 Rest In Bengal. All Rights Reserved.
+</footer>
 
 </body>
 </html>
