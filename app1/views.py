@@ -151,3 +151,26 @@ def create_point(request):
         form = PointForm()
 
     return render(request, 'points.html', {'form': form})
+
+from django.shortcuts import render, redirect
+from .forms import ReviewForm
+from .models import Review  # মডেলটি ইমপোর্ট করতে ভুলবে না
+
+# Review view
+@login_required(login_url='login')
+def leave_review(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user  # রিভিউটিকে লগড ইন ইউজারের সাথে সম্পর্কিত করো
+            review.save()
+            return redirect('leave_review')  # রিভিউ সাবমিট হওয়ার পর সেই পেজে রিডাইরেক্ট করো
+    else:
+        form = ReviewForm()
+
+    # সমস্ত রিভিউ গুলো পেজে দেখানোর জন্য
+    reviews = Review.objects.all()
+
+    return render(request, 'review.html', {'form': form, 'reviews': reviews})
+

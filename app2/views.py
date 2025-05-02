@@ -19,8 +19,9 @@ def leave_review(request):
             return redirect('home')  # Redirect to the home page after saving the review
     else:
         form = ReviewForm()
+    reviews = Review.objects.all()  # Fetch all reviews
+    return render(request, 'review.html', {'form': form, 'reviews': reviews})  # Pass reviews to template
 
-    return render(request, 'review.html', {'form': form})
 
 
 

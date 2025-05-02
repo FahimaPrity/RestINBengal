@@ -1,5 +1,7 @@
 from django import forms
 from .models import Booking, Payment, Point
+from django import forms
+from .models import Booking, Payment, Point, Review
 
 class BookingForm(forms.ModelForm):
     class Meta:
@@ -20,3 +22,11 @@ class PointForm(forms.ModelForm):
     class Meta:
         model = Point
         fields = ['user', 'points_earned', 'points_used']
+
+        # forms.py
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['reviewer_name', 'rating', 'comment']
+
