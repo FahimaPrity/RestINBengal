@@ -14,6 +14,10 @@ from django.contrib import messages
 from django.contrib.auth import login
 
 
+from django.shortcuts import redirect, get_object_or_404
+from app1.models import Booking
+from app2.models import Room
+
 # Register view for user registration
 def register(request):
     if request.method == 'POST':
@@ -221,3 +225,21 @@ def leave_review(request):
 
     return render(request, 'review.html', {'form': form, 'reviews': reviews})
 
+
+
+# views.py
+
+
+
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    room = booking.room  # ধরে নাও, Booking মডেলে room ForeignKey আছে
+
+    # 1️⃣ প্রথমে Booking delete করো
+    booking.delete()
+
+    # 2️⃣ তারপর Room এর status update করো
+    room.status = 'available'
+    room.save()
+
+    return redirect('view_rooms')

@@ -6,11 +6,13 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 
 from app1.forms import BookingForm
+from app1.models import Booking
 from app2.models import Room, Review
 from app2.forms import ReviewForm
 def view_rooms(request):
     rooms = Room.objects.all()  # Fetch all rooms
-    return render(request, 'room.html', {'rooms': rooms})
+    bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'room.html', {'rooms': rooms, 'bookings': bookings})
 def leave_review(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)

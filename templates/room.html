@@ -126,6 +126,25 @@
             <li>No rooms available.</li>
         {% endfor %}
     </ul>
+    <br><br>
+<h1>Your Bookings</h1>
+
+{% if bookings %}
+    {% for booking in bookings %}
+        <div class="booking-card">
+            <p>Room: {{ booking.room.type }} ({{ booking.room.price }})</p>
+            <p>Check-in: {{ booking.check_in }}</p>
+            <p>Check-out: {{ booking.check_out }}</p>
+
+            <form action="{% url 'cancel_booking' booking.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Cancel Booking</button>
+            </form>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>You have no bookings.</p>
+{% endif %}
 </body>
 </html>
 
