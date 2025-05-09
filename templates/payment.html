@@ -98,7 +98,11 @@
             <h3>📋 Booking Details</h3>
             <p>Booked by <strong>{{ booking.user.username }}</strong></p>
             <p>Room: <strong>{{ booking.room }}</strong></p>
-            <p>From: <strong>{{ booking.check_in_date }}</strong> To: <strong>{{ booking.check_out_date }}</strong></p>
+            <p>From: <strong>{{ booking.check_in }}</strong> To: <strong>{{ booking.check_out }}</strong></p>
+            <p>Nights: <strong>{{ nights }}</strong></p>
+            <p>Price per night: <strong>{{ booking.room.price }} ৳</strong></p>
+            <p>Total amount: <strong>{{ total_amount }} ৳</strong></p>
+
         </div>
     </main>
 </body>

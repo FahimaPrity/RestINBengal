@@ -12,7 +12,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import login
-
+from datetime import timedelta
 
 from django.shortcuts import redirect, get_object_or_404
 from app1.models import Booking
@@ -143,18 +143,28 @@ def book_room(request):
 
 
 # Payment view for making a payment for a booking
+
+
+
 @login_required(login_url='login')
 def make_payment(request, booking_id):
-    try:
-        booking = Booking.objects.get(id=booking_id)
-    except Booking.DoesNotExist:
-        raise Http404("Booking does not exist")
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    # ✅ Calculate number of nights
+    nights = (booking.check_out - booking.check_in).days
+    if nights <= 0:
+        nights = 1  # minimum 1 night fallback
+
+    # ✅ Calculate total amount
+    room_price = booking.room.price
+    total_amount = nights * room_price
 
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
             payment = form.save(commit=False)
             payment.booking = booking
+            payment.amount = total_amount  # ✅ Save the calculated amount
             payment.save()
 
             # Award 10 points to the user for payment
@@ -168,7 +178,12 @@ def make_payment(request, booking_id):
     else:
         form = PaymentForm()
 
-    return render(request, 'payment.html', {'form': form, 'booking': booking})
+    return render(request, 'payment.html', {
+        'form': form,
+        'booking': booking,
+        'nights': nights,
+        'total_amount': total_amount,
+    })
 
 
 # View to display the points the user has earned
