@@ -1,80 +1,58 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponseForbidden
 from django.db.models import F
 from django.contrib.auth.models import User
-from .models import Booking, Payment, Point
-from app2.models import Room, Review
-from .forms import BookingForm, PaymentForm, PointForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from datetime import timedelta
 
-from django.shortcuts import redirect, get_object_or_404
-from app1.models import Booking
-from app2.models import Room
+from .models import Booking, Payment, Point
+from app2.models import Room, Review
+from .forms import BookingForm, PaymentForm, PointForm, ReviewForm
 
-# Register view for user registration
+
+# ✅ Register view
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Automatically log the user in
+            login(request, user)
             messages.success(request, 'Account created successfully. You are now logged in.')
-            return redirect('home')  # Redirect to home page after login
+            return redirect('home')
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
 
-# Home view that shows user bookings, payments, and points
+# ✅ Home view
 @login_required(login_url='login')
 def home(request):
     total_points = 0
-    try:
-        # Calculate total points earned by the user
-        total_points = Point.objects.filter(user=request.user).first().points_earned if Point.objects.filter(
-            user=request.user).exists() else 0
-    except:
-        pass
+    point_obj = Point.objects.filter(user=request.user).first()
+    if point_obj:
+        total_points = point_obj.points_earned
 
-    # Filter objects based on the current logged-in user
     bookings = Booking.objects.filter(user=request.user)
     payments = Payment.objects.filter(booking__user=request.user)
-    points = Point.objects.filter(user=request.user)
     rooms = Room.objects.all()
     reviews = Review.objects.all()
 
     return render(request, 'home.html', {
         'bookings': bookings,
         'payments': payments,
-        'points': points,
         'rooms': rooms,
         'reviews': reviews,
-        'total_points': total_points,  # Show total points on home page
-    })
-@login_required(login_url='login')
-def admin_dashboard(request):
-    if not request.user.is_superuser:
-        raise Http404("You are not authorized to access this page.")
-
-    all_users = User.objects.all()
-    all_bookings = Booking.objects.all()
-    all_payments = Payment.objects.all()
-    all_reviews = Review.objects.all()
-
-    return render(request, 'admin_dashboard.html', {
-        'users': all_users,
-        'bookings': all_bookings,
-        'payments': all_payments,
-        'reviews': all_reviews,
+        'total_points': total_points,
     })
 
+
+# ✅ Admin dashboard
+
+
+# ✅ Book room view
 @login_required(login_url='login')
 def book_room(request):
     if request.user.is_superuser:
@@ -92,6 +70,7 @@ def book_room(request):
                 booking.user = request.user
                 booking.save()
 
+                # Add 10 points
                 point_obj, created = Point.objects.get_or_create(user=request.user)
                 point_obj.points_earned = F('points_earned') + 10
                 point_obj.save()
@@ -107,76 +86,38 @@ def book_room(request):
     return render(request, 'book_room.html', {'form': form, 'rooms': rooms})
 
 
-# Booking view for booking a room
-@login_required(login_url='login')
-def book_room(request):
-    if request.method == 'POST':
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            room = form.cleaned_data['room']
-            # Check if room is available
-            if room.status == 'available':
-                # Book the room and mark it as not available
-                room.status = 'not available'
-                room.save()
-
-                booking = form.save(commit=False)
-                booking.user = request.user  # Assuming the user is logged in
-                booking.save()
-
-                # Award 10 points to the user upon booking
-                user = request.user
-                point_obj, created = Point.objects.get_or_create(user=user)
-                point_obj.points_earned = F('points_earned') + 10
-                point_obj.save()
-                point_obj.refresh_from_db()
-
-                # Redirect to payment page
-                return redirect('make_payment', booking_id=booking.id)
-            else:
-                form.add_error('room', 'This room is already booked or unavailable.')
-    else:
-        form = BookingForm()
-
-    rooms = Room.objects.filter(status='available')
-    return render(request, 'book_room.html', {'form': form, 'rooms': rooms})
-
-
-# Payment view for making a payment for a booking
-
-
-
+# ✅ Make payment view
 @login_required(login_url='login')
 def make_payment(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
 
-    # ✅ Calculate number of nights
     nights = (booking.check_out - booking.check_in).days
-    if nights <= 0:
-        nights = 1  # minimum 1 night fallback
-
-    # ✅ Calculate total amount
-    room_price = booking.room.price
-    total_amount = nights * room_price
+    total_amount = booking.room.price * nights
 
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
-            payment = form.save(commit=False)
-            payment.booking = booking
-            payment.amount = total_amount  # ✅ Save the calculated amount
-            payment.save()
+            amount = form.cleaned_data['amount']
 
-            # Award 10 points to the user for payment
-            user = booking.user
-            point_obj, created = Point.objects.get_or_create(user=user)
-            point_obj.points_earned = F('points_earned') + 10
-            point_obj.save()
-            point_obj.refresh_from_db()
+            if amount != total_amount:
+                messages.error(request, f"❌ You must pay exactly {total_amount} ৳.")
+            else:
+                payment = form.save(commit=False)
+                payment.booking = booking
+                payment.user = request.user
+                payment.save()
 
-            return redirect('view_points')
+                messages.success(request, "✅ Payment here")
+
+                # Add 10 points for payment (optional)
+                point_obj, created = Point.objects.get_or_create(user=request.user)
+                point_obj.points_earned = F('points_earned') + 10
+                point_obj.save()
+                point_obj.refresh_from_db()
+
+                return redirect('view_points')
     else:
-        form = PaymentForm()
+        form = PaymentForm(initial={'amount': total_amount})
 
     return render(request, 'payment.html', {
         'form': form,
@@ -186,27 +127,20 @@ def make_payment(request, booking_id):
     })
 
 
-# View to display the points the user has earned
+# ✅ View points
 @login_required(login_url='login')
 def view_points(request):
-    # Get the points object for the user (if any)
     point_obj, created = Point.objects.get_or_create(user=request.user)
-
-    # Calculate the total points by summing the points earned for each booking
-    total_points = sum(10 for booking in Booking.objects.filter(user=request.user))
-
-    point_obj.points_earned = total_points  # Update the points earned for the user
-    point_obj.save()
-
-    # Display the total points on the points page
+    total_points = point_obj.points_earned
     return render(request, 'points.html', {'total_points': total_points})
 
+
+# ✅ About view
 def about_view(request):
     return render(request, 'about.html')
 
 
-
-# Create points form for manual creation of points (optional)
+# ✅ Create point (optional)
 def create_point(request):
     if request.method == 'POST':
         form = PointForm(request.POST)
@@ -215,46 +149,44 @@ def create_point(request):
             return redirect('view_points')
     else:
         form = PointForm()
-
     return render(request, 'points.html', {'form': form})
 
-from django.shortcuts import render, redirect
-from .forms import ReviewForm
-from .models import Review  # মডেলটি ইমপোর্ট করতে ভুলবে না
 
-# Review view
+# ✅ Leave review
 @login_required(login_url='login')
 def leave_review(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user  # রিভিউটিকে লগড ইন ইউজারের সাথে সম্পর্কিত করো
+            review.user = request.user
             review.save()
-            return redirect('leave_review')  # রিভিউ সাবমিট হওয়ার পর সেই পেজে রিডাইরেক্ট করো
+            return redirect('leave_review')
     else:
         form = ReviewForm()
 
-    # সমস্ত রিভিউ গুলো পেজে দেখানোর জন্য
     reviews = Review.objects.all()
-
     return render(request, 'review.html', {'form': form, 'reviews': reviews})
 
 
-
-# views.py
-
-
-
+# ✅ Cancel booking
+@login_required(login_url='login')
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    room = booking.room  # ধরে নাও, Booking মডেলে room ForeignKey আছে
-
-    # 1️⃣ প্রথমে Booking delete করো
+    room = booking.room
     booking.delete()
-
-    # 2️⃣ তারপর Room এর status update করো
     room.status = 'available'
     room.save()
+    # 3️⃣ Points কমাও
+    point_obj, created = Point.objects.get_or_create(user=request.user)
+    if point_obj.points_earned >= 10:
+        point_obj.points_earned = F('points_earned') - 20
+        point_obj.save()
+        point_obj.refresh_from_db()
+    else:
+        # যদি points 0 এর নিচে চলে যায়, তাহলে 0 রাখো
+        point_obj.points_earned = 0
+        point_obj.save()
+
 
     return redirect('view_rooms')

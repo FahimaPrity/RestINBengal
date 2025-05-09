@@ -88,6 +88,12 @@
 
     <main>
         <h1>💳 Make Payment</h1>
+        {% if messages %}
+    {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}

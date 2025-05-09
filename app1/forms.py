@@ -18,6 +18,12 @@ class PaymentForm(forms.ModelForm):
         model = Payment
         fields = ['amount']
 
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if amount <= 0:
+            raise forms.ValidationError("Amount must be greater than zero.")
+        return amount
+
 class PointForm(forms.ModelForm):
     class Meta:
         model = Point
