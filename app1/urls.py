@@ -16,6 +16,7 @@ path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name
     path('create-point/', views.create_point, name='create_point'),
     path('about/', views.about_view, name='about'),
     path('cancel-booking/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
+    path('update-booking/<int:booking_id>/', views.update_booking, name='update_booking'),
 
 
 ]

@@ -140,6 +140,10 @@
                 {% csrf_token %}
                 <button type="submit">Cancel Booking</button>
             </form>
+            <form action="{% url 'update_booking' booking.id %}" method="get">
+                <button type="submit">Update Booking</button>
+            </form>
+
         </div>
     {% endfor %}
 {% else %}

@@ -11,6 +11,9 @@ class BookingForm(forms.ModelForm):
             'check_in': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
             'check_out': forms.DateInput(attrs={'type': 'date', 'class': 'datepicker'}),
         }
+def __init__(self, *args, **kwargs):
+    super(BookingForm, self).__init__(*args, **kwargs)
+    self.fields['room'].disabled = True
 
 
 class PaymentForm(forms.ModelForm):

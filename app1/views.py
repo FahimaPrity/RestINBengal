@@ -190,3 +190,19 @@ def cancel_booking(request, booking_id):
 
 
     return redirect('view_rooms')
+
+# ✅ Update booking view
+@login_required(login_url='login')
+def update_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST, instance=booking)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✅ Your booking has been updated successfully!")
+            return redirect('home')
+    else:
+        form = BookingForm(instance=booking)
+
+    return render(request, 'update_booking.html', {'form': form, 'booking': booking})
